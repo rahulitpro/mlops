@@ -1,0 +1,16 @@
+version: '3.8'
+
+# Add this section to disable the automatic pod creation
+x-podman:
+  in_pod: false
+  
+services:
+  preprocessor:
+    image: ghcr.io/${GIT_USERNAME}/${GIT_REPO}/taxi-preprocessor:1.0
+    name: taxi-preprocessor
+    userns_mode: keep-id
+    # Ensure bridge mode is used since there is no pod network
+    network_mode: bridge 
+    volumes:
+      - ${RAW_DATA_PATH}:/preprocessor/data/raw
+      - ${PREPROCESSED_DATA_PATH}:/preprocessor/data/preprocessed:z

@@ -1,0 +1,16 @@
+FROM python:3.12.12-slim
+
+RUN useradd -ms /bin/bash python
+
+WORKDIR /preprocessor
+
+COPY requirements.txt utils.py nys_yellow_taxi_tripdata_preprocessor.py cmd.sh ./
+
+RUN mkdir -p /preprocessor/data/raw /preprocessor/data/preprocessed && chown -Rv python:python /preprocessor
+
+USER python
+ENV PATH="/home/python/.local/bin:${PATH}"
+
+RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt && chmod -v 700 ./cmd.sh
+
+CMD [ "./cmd.sh"]

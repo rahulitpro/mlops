@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mlflow:
+    restart: always
+    image: ghcr.io/mlflow/mlflow
+    container_name: mlflow-server
+    ports:
+      - ${MLFLOW_PORT}:${MLFLOW_PORT}
+    environment:
+      - MLFLOW_PORT=${MLFLOW_PORT}
+      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY}
+      - MLFLOW_S3_ENDPOINT_URL=http://${MINIO_HOST}:${MINIO_PORT}
+      - MLFLOW_S3_IGNORE_TLS=true
+      - PG_HOST=${PG_HOST}
+      - PG_USER=${PG_USER}
+      - PG_PASSWORD=${PG_PASSWORD}
+      - PG_PORT=${PG_PORT}
+      - PG_DATABASE=${PG_DATABASE}
+      - MLFLOW_BUCKET_NAME=${MLFLOW_BUCKET_NAME}
+    command: >
+      mlflow server
+      --backend-store-uri postgresql://${PG_USER}:${PG_PASSWORD}@${PG_HOST}:${PG_PORT}/${PG_DATABASE}
+      --host 0.0.0.0
+      --serve-artifacts
+      --artifacts-destination s3://${MLFLOW_BUCKET_NAME}
+      --allowed-hosts *
+      --cors-allowed-origins 192.168.3.*,192.168.2.*
+    healthcheck:
+      test: [ "CMD-SHELL",  "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:${MLFLOW_PORT}/health')\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
