@@ -12,7 +12,6 @@ http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml.
 | | 2 = Curb Mobility, LLC |
 | | 6 = Myle Technologies Inc |
 | | 7 = Helix |
-|---|---|
 | tpep_pickup_datetime | The date and time when the meter was engaged |
 | tpep_dropoff_datetime | The date and time when the meter was disengaged |
 | passenger_count | The number of passengers in the vehicle. |
