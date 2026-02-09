@@ -208,5 +208,5 @@ __marimo__/
 
 .*
 __pycache__/
-dataops/data/raw/
-dataops/data/preprocessed
+*.parquet
+*.csv
