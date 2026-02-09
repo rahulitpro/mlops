@@ -30,6 +30,7 @@ def taxi_preprocess_and_save(input_path, output_path, freq_maps_file):
         & (df_preprocessed["total_amount"] > 2.5)
         & (df_preprocessed["total_amount"] < 500)
     ].copy()
+
     print(f"Filtered {initial_count - len(df_preprocessed)} outlier rows.")
     # 4. Feature Extraction
     df_preprocessed["pickup_hour"] = df_preprocessed["tpep_pickup_datetime"].dt.hour
